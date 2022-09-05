@@ -1,0 +1,79 @@
+#navigation-bar, #footer {
+    font-family: 'Oxygen', sans-serif;
+}
+
+#navigation-bar {
+    background-color: #072436;
+}
+
+#navigation-bar .navbar-brand {
+    color: #c2f970;
+    font-family: 'Kalam', cursive;
+    font-size: 4rem;
+}
+
+#navigation-bar .nav-link {
+    color: #c724b1;
+    font-size: 2rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+#navigation-bar .navbar {
+    --bs-navbar-toggler-border-color: #c724b1 !important;
+}
+
+#navigation-bar .navbar-toggler-icon {
+    filter: invert(22%) sepia(88%) saturate(2211%) hue-rotate(288deg) brightness(96%) contrast(101%);
+}
+
+
+#footer svg {
+    filter: invert(22%) sepia(88%) saturate(2211%) hue-rotate(288deg) brightness(96%) contrast(101%);
+    height: 4rem;
+    margin: 1rem;
+}
+
+#footer  {
+    background-color: #072436;
+    color: #c724b1;
+}
+
+#footer .container-fluid {
+    text-align: center;
+}
+
+#footer .btn {
+    --bs-btn-active-bg: #c724b1 !important;
+    --bs-btn-active-border-color: #c724b1 !important;
+    --bs-btn-border-color: #c724b1 !important;
+    --bs-btn-color: #c724b1 !important;
+    --bs-btn-hover-bg: #c724b1 !important;
+    --bs-btn-hover-border-color: #c724b1 !important;
+}
+
+#footer h1 {
+    font-family: 'Kalam', cursive;
+    margin: 2rem;
+}
+
+#footer .input-group {
+    padding-left: 8rem;
+    padding-right: 8rem;
+}
+
+#index .carousel {
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+}
+
+#index .carousel h1 {
+    font-size: 6rem;
+    margin: 2rem;
+}
+
+#index .carousel h2 {
+    font-size: 4rem;
+    margin: 2rem;
+}
