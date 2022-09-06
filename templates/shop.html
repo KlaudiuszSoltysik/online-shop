@@ -1,3 +1,145 @@
 {% include "header.html" %}
 
+<section id="shop">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="what are you looking for" aria-label="what are you looking for" aria-describedby="button-addon2">
+          <button class="btn btn-outline-secondary" type="button" id="button-addon2">search</button>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            gender
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="gender-female">
+                <label class="form-check-label" for="gender-female">
+                  female
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="gender-male">
+                <label class="form-check-label" for="gender-male">
+                  male
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="gender-unisex">
+                <label class="form-check-label" for="gender-unisex">
+                  unisex
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+            color
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="color-black">
+                <label class="form-check-label" for="color-black">
+                  black
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="color-white">
+                <label class="form-check-label" for="color-white">
+                  white
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="color-other">
+                <label class="form-check-label" for="color-other">
+                  other
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+            size
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="size-39">
+                <label class="form-check-label" for="size-39">
+                  39
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="size-40">
+                <label class="form-check-label" for="size-40">
+                  40
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="size-41">
+                <label class="form-check-label" for="size-41">
+                  41
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="card" style="width: 18rem;">
+          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="../static/img/1/b1.jpg">
+              </div>
+              <div class="carousel-item">
+                <img src="../static/img/1/b2.jpg">
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">item name</h5>
+            <div class="row">
+              <div class="col">
+                <a href="{{ url_for('item') }}" class="btn btn-primary">open</a>
+              </div>
+              <div class="col">
+                <a href="#" class="btn btn-primary">add</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% include "footer.html" %}
