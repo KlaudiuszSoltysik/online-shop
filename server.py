@@ -1,12 +1,7 @@
 from flask import Flask, render_template
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-
-
-def convert_to_blob(filename):
-    with open(filename, 'rb') as file:
-        blob = file.read()
-    return blob
+from sqlalchemy import desc
 
 
 app = Flask(__name__)
@@ -19,29 +14,21 @@ db = SQLAlchemy(app)
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250), unique=True, nullable=False)
-    gender = db.Column(db.String(250), nullable=False)
-    color = db.Column(db.String(250), nullable=False)
-    size = db.Column(db.Integer, nullable=False)
+    brand = db.Column(db.String(32), nullable=False)
+    model = db.Column(db.String(32), nullable=False)
+    gender = db.Column(db.String(8), nullable=False)
+    color = db.Column(db.String(16), nullable=False)
+    stock_39 = db.Column(db.Integer, nullable=True)
+    stock_40 = db.Column(db.Integer, nullable=True)
+    stock_41 = db.Column(db.Integer, nullable=True)
     price = db.Column(db.Integer, nullable=False)
-    stock = db.Column(db.Integer, nullable=False)
-    photo1 = db.Column(db.BLOB, nullable=False)
-    photo2 = db.Column(db.BLOB, nullable=False)
+    desc = db.Column(db.String(512), nullable=True)
+    params = db.Column(db.String(512), nullable=True)
+    img1 = db.Column(db.String(128), nullable=True)
+    img2 = db.Column(db.String(128), nullable=True)
 
 
-db.create_all()
-
-# CREATE RECORD
-new_item = Item(id=1,
-                name="PUMA Carina Crew",
-                gender="female",
-                size=39,
-                price=220,
-                stock=10,
-                photo1=convert_to_blob("static/img/1/b1.jpg"),
-                photo2=convert_to_blob("static/img/1/b2.jpg"))
-
-db.session.add(new_item)
+all_items = db.session.query(Item).all()
 db.session.commit()
 
 
@@ -52,11 +39,13 @@ def homepage():
 
 @app.route('/shop')
 def shop():
-    return render_template("shop.html", current_year=datetime.now().year)
+    return render_template("shop.html", current_year=datetime.now().year, all_items=all_items)
 
-@app.route('/shop/item')
-def item():
-    return render_template("item.html", current_year=datetime.now().year)
+
+@app.route('/shop/<int:item_id>')
+def item(item_id):
+    item = Item.query.filter_by(id=item_id).first()
+    return render_template("item.html", current_year=datetime.now().year, item=item)
 
 
 @app.route('/about')

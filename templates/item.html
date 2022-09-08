@@ -7,10 +7,10 @@
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="../static/img/1/b1.jpg">
+              <img src="{{ item.img1 }}">
             </div>
             <div class="carousel-item">
-              <img src="../static/img/1/b2.jpg">
+              <img src="{{ item.img2 }}">
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -26,8 +26,9 @@
       <div class="col-lg-6">
         <div class="card" style="width: 24rem;">
           <div class="card-body">
-            <h1 class="card-title">ITEM NAME</h1>
-            <h2 class="card-title">ITEM PRICE</h2>
+            <h1 class="card-title">{{ item.brand }}</h1>
+            <h1 class="card-title">{{ item.model }}</h1>
+            <h2 class="card-title">{{ item.price }} PLN</h2>
             <a href="#" class="btn btn-lg btn-primary">add to shopping cart</a>
           </div>
         </div>
@@ -43,7 +44,7 @@
         </h2>
         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
           <div class="accordion-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            {{ item.desc }}
           </div>
         </div>
       </div>
@@ -55,7 +56,7 @@
         </h2>
         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
           <div class="accordion-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            {{ item.params }}
           </div>
         </div>
       </div>
