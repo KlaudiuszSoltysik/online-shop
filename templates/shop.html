@@ -13,11 +13,14 @@
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             gender
+            {% if gender %}
+             {{ gender }}
+            {% endif %}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="{{ url_for('shop', gender='female') }}">female</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('shop', gender='male') }}">male</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('shop', gender='unisex') }}">unisex</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender='female', color=color, size=size, sort_by=sort) }}">female</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender='male', color=color, size=size, sort_by=sort) }}">male</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender='unisex', color=color, size=size, sort_by=sort) }}">unisex</a></li>
           </ul>
         </div>
       </div>
@@ -25,11 +28,14 @@
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
             color
+            {% if color %}
+             {{ color }}
+            {% endif %}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="{{ url_for('shop', color='black') }}">black</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('shop', color='while') }}">white</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('shop', color='other') }}">other</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color='black', size=size, sort_by=sort) }}">black</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color='while', size=size, sort_by=sort) }}">white</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color='other', size=size, sort_by=sort) }}">other</a></li>
           </ul>
         </div>
       </div>
@@ -37,11 +43,14 @@
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
             size
+            {% if size %}
+             {{ size }}
+            {% endif %}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="{{ url_for('shop', size='39') }}">39</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('shop', size='40') }}">40</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('shop', size='41') }}">41</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color=color, size='39', sort_by=sort) }}">39</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color=color, size='40', sort_by=sort) }}">40</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color=color, size='41', sort_by=sort) }}">41</a></li>
           </ul>
         </div>
       </div>
@@ -49,11 +58,14 @@
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-expanded="false">
             sort by
+            {% if sort %}
+             {{ sort }}
+            {% endif %}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="#">price</a></li>
-            <li><a class="dropdown-item" href="#">name</a></li>
-            <li><a class="dropdown-item" href="#">default</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color=color, size=size, sort_by='price') }}">price</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color=color, size=size, sort_by='model') }}">model name</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color=color, size=size, sort_by='') }}">default</a></li>
           </ul>
         </div>
       </div>

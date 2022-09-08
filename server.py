@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+
+from wtforms import StringField, PasswordField
+from wtforms.validators import EqualTo, InputRequired
+
+from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = "password"
 
 # CONNECT WITH DATABASE
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///online_shop.db"
@@ -27,6 +33,20 @@ class Item(db.Model):
     img2 = db.Column(db.String(128), nullable=True)
 
 
+class LogForm(FlaskForm):
+    email = StringField(label="email:", validators=[InputRequired()])
+    password = PasswordField(label="password:", validators=[InputRequired()])
+
+
+class RegisterForm(FlaskForm):
+    email = StringField(label="email:", validators=[InputRequired()])
+    password = PasswordField(label="password:", validators=[InputRequired(), EqualTo('password2', message='passwords must match')])
+    password2 = PasswordField(label="repeat password:", validators=[InputRequired()])
+    name = StringField(label="name and surname:", validators=[InputRequired()])
+    street = StringField(label="street:", validators=[InputRequired()])
+    city = StringField(label="city:", validators=[InputRequired()])
+
+
 @app.route('/')
 def homepage():
     return render_template("index.html", current_year=datetime.now().year)
@@ -40,6 +60,7 @@ def shop():
     gender = request.args.get("gender")
     color = request.args.get("color")
     size = request.args.get("size")
+    sort = request.args.get("sort_by")
 
     temp_items = []
 
@@ -83,7 +104,13 @@ def shop():
         items = temp_items.copy()
         temp_items = []
 
-    return render_template("shop.html", current_year=datetime.now().year, all_items=items)
+    if sort == "price":
+        items.sort(key=lambda x: x.price)
+
+    if sort == "model":
+        items.sort(key=lambda x: x.model)
+
+    return render_template("shop.html", current_year=datetime.now().year, all_items=items, gender=gender, color=color, size=size, sort=sort)
 
 
 @app.route('/shop/<int:item_id>')
@@ -100,6 +127,16 @@ def about():
 @app.route('/contact')
 def contact():
     return render_template("contact.html", current_year=datetime.now().year)
+
+
+@app.route('/log_in')
+def log_in():
+    return render_template("log_in.html", current_year=datetime.now().year, form=LogForm())
+
+
+@app.route('/register')
+def register():
+    return render_template("register.html", current_year=datetime.now().year, form=RegisterForm())
 
 
 if __name__ == "__main__":

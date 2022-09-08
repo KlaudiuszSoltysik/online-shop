@@ -1,9 +1,14 @@
 {% include "header.html" %}
 
 <section id="log-in">
-    <div class="container-fluid">
-
-    </div>
+  <div class="container-fluid">
+    <form class="form-group" method="POST" action="{{ url_for('log_in') }}">
+	  <p>{{ form.csrf_token }}
+	  <p>{{ form.email.label }} <br> {{ form.email(size=30) }}</p>
+	  <p>{{ form.password.label }} <br> {{ form.password(size=30) }}</p>
+	  <p><input type="submit" value="log In"></p>
+    </form>
+  </div>
 </section>
 
 {% include "footer.html" %}
