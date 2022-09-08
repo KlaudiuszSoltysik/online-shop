@@ -1,17 +1,16 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc
-
 
 app = Flask(__name__)
 
-
+# CONNECT WITH DATABASE
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///online_shop.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
+# DATABASE STRUCTURE
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     brand = db.Column(db.String(32), nullable=False)
@@ -28,10 +27,6 @@ class Item(db.Model):
     img2 = db.Column(db.String(128), nullable=True)
 
 
-all_items = db.session.query(Item).all()
-db.session.commit()
-
-
 @app.route('/')
 def homepage():
     return render_template("index.html", current_year=datetime.now().year)
@@ -39,7 +34,56 @@ def homepage():
 
 @app.route('/shop')
 def shop():
-    return render_template("shop.html", current_year=datetime.now().year, all_items=all_items)
+    items = db.session.query(Item).all()
+
+    search = request.args.get("search")
+    gender = request.args.get("gender")
+    color = request.args.get("color")
+    size = request.args.get("size")
+
+    temp_items = []
+
+    if gender:
+        for item in items:
+            if item.gender == gender:
+                temp_items.append(item)
+
+        items = temp_items.copy()
+        temp_items = []
+
+    if color:
+        for item in items:
+            if item.color == color:
+                temp_items.append(item)
+
+        items = temp_items.copy()
+        temp_items = []
+
+    if size == "39":
+        for item in items:
+            if item.stock_39:
+                temp_items.append(item)
+
+        items = temp_items.copy()
+        temp_items = []
+
+    if size == "40":
+        for item in items:
+            if item.stock_40:
+                temp_items.append(item)
+
+        items = temp_items.copy()
+        temp_items = []
+
+    if size == "41":
+        for item in items:
+            if item.stock_41:
+                temp_items.append(item)
+
+        items = temp_items.copy()
+        temp_items = []
+
+    return render_template("shop.html", current_year=datetime.now().year, all_items=items)
 
 
 @app.route('/shop/<int:item_id>')
@@ -60,3 +104,6 @@ def contact():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# COMMIT CHANGES TO DATABASE
+db.session.commit()

@@ -15,30 +15,9 @@
             gender
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="gender-female">
-                <label class="form-check-label" for="gender-female">
-                  female
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="gender-male">
-                <label class="form-check-label" for="gender-male">
-                  male
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="gender-unisex">
-                <label class="form-check-label" for="gender-unisex">
-                  unisex
-                </label>
-              </div>
-            </li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender='female') }}">female</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender='male') }}">male</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender='unisex') }}">unisex</a></li>
           </ul>
         </div>
       </div>
@@ -48,30 +27,9 @@
             color
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="color-black">
-                <label class="form-check-label" for="color-black">
-                  black
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="color-white">
-                <label class="form-check-label" for="color-white">
-                  white
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="color-other">
-                <label class="form-check-label" for="color-other">
-                  other
-                </label>
-              </div>
-            </li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', color='black') }}">black</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', color='while') }}">white</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', color='other') }}">other</a></li>
           </ul>
         </div>
       </div>
@@ -81,37 +39,16 @@
             size
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="size-39">
-                <label class="form-check-label" for="size-39">
-                  39
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="size-40">
-                <label class="form-check-label" for="size-40">
-                  40
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="size-41">
-                <label class="form-check-label" for="size-41">
-                  41
-                </label>
-              </div>
-            </li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', size='39') }}">39</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', size='40') }}">40</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', size='41') }}">41</a></li>
           </ul>
         </div>
       </div>
       <div class="col-lg-2 col-md-6">
         <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            sort by:
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-expanded="false">
+            sort by
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item" href="#">price</a></li>
