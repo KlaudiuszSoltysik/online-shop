@@ -11,10 +11,12 @@
           </div >
           <div class="col-lg-6">
             <h1>subscribe:</h1>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="mail address" aria-label="mail address" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">sign in</button>
-            </div>
+            {{ newsletter.csrf_token }}
+              {{ newsletter.email.label }} <br> {{ newsletter.email(size=30) }}
+              {% for error in newsletter.email.errors %}
+                <span style="color:red">{{ error }}</span>
+              {% endfor %}
+              {{ newsletter.submit }}
           </div>
         </div>
       </div>

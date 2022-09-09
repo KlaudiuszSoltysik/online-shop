@@ -207,9 +207,9 @@
 }
 
 #log-in .container-fluid {
-
+    text-align: center
 }
 
 #register .container-fluid {
-
+    text-align: center;
 }

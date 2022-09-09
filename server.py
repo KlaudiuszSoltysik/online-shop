@@ -1,13 +1,15 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
+from flask_bootstrap import Bootstrap
 
-from wtforms import StringField, PasswordField
-from wtforms.validators import EqualTo, InputRequired
+from wtforms import StringField, PasswordField, SubmitField, validators
+from wtforms.validators import EqualTo, DataRequired
 
 from datetime import datetime
 
 app = Flask(__name__)
+Bootstrap(app)
 app.secret_key = "password"
 
 # CONNECT WITH DATABASE
@@ -34,26 +36,51 @@ class Item(db.Model):
 
 
 class LogForm(FlaskForm):
-    email = StringField(label="email:", validators=[InputRequired()])
-    password = PasswordField(label="password:", validators=[InputRequired()])
+    email = StringField(label="email", validators=[DataRequired(),
+                                                   validators.Email(message="invalid email address"),
+                                                   validators.Length(min=12, message="email too short")])
+    password = PasswordField(label="password", validators=[DataRequired(),
+                                                           validators.Length(min=8, message="password too short")])
+    submit = SubmitField(label="log in")
 
 
 class RegisterForm(FlaskForm):
-    email = StringField(label="email:", validators=[InputRequired()])
-    password = PasswordField(label="password:", validators=[InputRequired(), EqualTo('password2', message='passwords must match')])
-    password2 = PasswordField(label="repeat password:", validators=[InputRequired()])
-    name = StringField(label="name and surname:", validators=[InputRequired()])
-    street = StringField(label="street:", validators=[InputRequired()])
-    city = StringField(label="city:", validators=[InputRequired()])
+    email = StringField(label="email", validators=[DataRequired(),
+                                                   validators.Email(message="invalid email address"),
+                                                   validators.Length(min=12, message="email too short")])
+    password = PasswordField(label="password", validators=[DataRequired(),
+                                                           EqualTo('password2', message="passwords must match"),
+                                                           validators.Length(min=8, message="password too short")])
+    password2 = PasswordField(label="repeat password", validators=[DataRequired(),
+                                                                   validators.Length(min=8,
+                                                                                     message="password too short")])
+    name = StringField(label="name and surname", validators=[DataRequired()])
+    street = StringField(label="street", validators=[DataRequired()])
+    city = StringField(label="city", validators=[DataRequired()])
+    submit = SubmitField(label="log in")
 
 
-@app.route('/')
+class NewsletterForm(FlaskForm):
+    email = StringField(label="email", validators=[validators.Email(message="invalid email address"),
+                                                   validators.Length(min=12, message="email too short")])
+    submit = SubmitField(label="sign up")
+
+
+@app.route("/", methods=["GET", "POST"])
 def homepage():
-    return render_template("index.html", current_year=datetime.now().year)
+    newsletter = NewsletterForm()
+
+    if newsletter.validate_on_submit():
+        pass
+
+    return render_template("index.html",
+                           current_year=datetime.now().year,
+                           newsletter=newsletter)
 
 
-@app.route('/shop')
+@app.route("/shop", methods=["GET", "POST"])
 def shop():
+    newsletter = NewsletterForm()
     items = db.session.query(Item).all()
 
     search = request.args.get("search")
@@ -61,6 +88,9 @@ def shop():
     color = request.args.get("color")
     size = request.args.get("size")
     sort = request.args.get("sort_by")
+
+    if newsletter.validate_on_submit():
+        pass
 
     temp_items = []
 
@@ -110,33 +140,86 @@ def shop():
     if sort == "model":
         items.sort(key=lambda x: x.model)
 
-    return render_template("shop.html", current_year=datetime.now().year, all_items=items, gender=gender, color=color, size=size, sort=sort)
+    return render_template("shop.html",
+                           current_year=datetime.now().year,
+                           all_items=items,
+                           gender=gender,
+                           color=color,
+                           size=size,
+                           sort=sort,
+                           newsletter=newsletter)
 
 
-@app.route('/shop/<int:item_id>')
+@app.route("/shop/<int:item_id>", methods=["GET", "POST"])
 def item(item_id):
+    newsletter = NewsletterForm()
     item = Item.query.filter_by(id=item_id).first()
-    return render_template("item.html", current_year=datetime.now().year, item=item)
+
+    if newsletter.validate_on_submit():
+        pass
+
+    return render_template("item.html",
+                           current_year=datetime.now().year,
+                           item=item,
+                           newsletter=newsletter)
 
 
-@app.route('/about')
+@app.route("/about", methods=["GET", "POST"])
 def about():
-    return render_template("about.html", current_year=datetime.now().year)
+    newsletter = NewsletterForm()
+
+    if newsletter.validate_on_submit():
+        pass
+
+    return render_template("about.html",
+                           current_year=datetime.now().year,
+                           newsletter=newsletter)
 
 
-@app.route('/contact')
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
-    return render_template("contact.html", current_year=datetime.now().year)
+    newsletter = NewsletterForm()
+
+    if newsletter.validate_on_submit():
+        pass
+
+    return render_template("contact.html",
+                           current_year=datetime.now().year,
+                           newsletter=newsletter)
 
 
-@app.route('/log_in')
+@app.route("/log_in", methods=["GET", "POST"])
 def log_in():
-    return render_template("log_in.html", current_year=datetime.now().year, form=LogForm())
+    form = LogForm()
+    newsletter = NewsletterForm()
+
+    if form.validate_on_submit():
+        return redirect(url_for("homepage"))
+
+    if newsletter.validate_on_submit():
+        pass
+
+    return render_template("log_in.html",
+                           current_year=datetime.now().year,
+                           form=form,
+                           newsletter=newsletter)
 
 
-@app.route('/register')
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html", current_year=datetime.now().year, form=RegisterForm())
+    form = RegisterForm()
+    newsletter = NewsletterForm()
+
+    if form.validate_on_submit():
+        return redirect(url_for("log_in"))
+
+    if newsletter.validate_on_submit():
+        print("xd")
+
+    return render_template("register.html",
+                           current_year=datetime.now().year,
+                           form=form,
+                           newsletter=newsletter)
 
 
 if __name__ == "__main__":
