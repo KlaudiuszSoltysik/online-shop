@@ -12,17 +12,16 @@
           <div class="col-lg-6">
             <h1>subscribe:</h1>
             {{ newsletter.csrf_token }}
-              {{ newsletter.email.label }} <br> {{ newsletter.email(size=30) }}
-              {% for error in newsletter.email.errors %}
-                <span style="color:red">{{ error }}</span>
-              {% endfor %}
-              {{ newsletter.submit }}
+            {{ newsletter.email.label }} {{ newsletter.email(size=30) }}
+            {% for error in newsletter.email.errors %}
+              <span style="color:red">{{ error }}</span>
+            {% endfor %}
+            {{ newsletter.submit }}
           </div>
         </div>
       </div>
       <small>&copy; Copyright {{ current_year }}, shoes shop</small>
     </section>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   </body>
 </html>

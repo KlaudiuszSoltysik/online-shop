@@ -27,6 +27,13 @@
     filter: invert(22%) sepia(88%) saturate(2211%) hue-rotate(288deg) brightness(96%) contrast(101%);
 }
 
+.flash-message {
+    text-align: center;
+    background-color: #072436;
+    padding: 1rem;
+    color: #fff;
+    font-size 2rem;:
+}
 
 #footer svg {
     filter: invert(22%) sepia(88%) saturate(2211%) hue-rotate(288deg) brightness(96%) contrast(101%);
@@ -207,9 +214,13 @@
 }
 
 #log-in .container-fluid {
-    text-align: center
+    text-align: center;
+    background-color: #9FB6B8;
+    padding: 3.65rem;
 }
 
 #register .container-fluid {
     text-align: center;
+    background-color: #9FB6B8;
+    padding: 1rem;
 }

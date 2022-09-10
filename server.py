@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for
+import sqlalchemy
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from wtforms import StringField, PasswordField, SubmitField, validators
-from wtforms.validators import EqualTo, DataRequired
+from wtforms.validators import DataRequired, InputRequired, EqualTo, Length, Email
 
 from datetime import datetime
 
@@ -35,28 +37,36 @@ class Item(db.Model):
     img2 = db.Column(db.String(128), nullable=True)
 
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32), nullable=False)
+    street = db.Column(db.String(32), nullable=False)
+    city = db.Column(db.String(32), nullable=False)
+    email = db.Column(db.String(32), nullable=False, unique=True)
+    password = db.Column(db.String(256), nullable=False)
+
+
+# FORMS
 class LogForm(FlaskForm):
     email = StringField(label="email", validators=[DataRequired(),
-                                                   validators.Email(message="invalid email address"),
-                                                   validators.Length(min=12, message="email too short")])
+                                                   Email(message="invalid email address"),
+                                                   Length(min=12, message="email too short")])
     password = PasswordField(label="password", validators=[DataRequired(),
-                                                           validators.Length(min=8, message="password too short")])
+                                                           Length(min=8, message="password too short")])
     submit = SubmitField(label="log in")
 
 
 class RegisterForm(FlaskForm):
     email = StringField(label="email", validators=[DataRequired(),
-                                                   validators.Email(message="invalid email address"),
-                                                   validators.Length(min=12, message="email too short")])
-    password = PasswordField(label="password", validators=[DataRequired(),
-                                                           EqualTo('password2', message="passwords must match"),
-                                                           validators.Length(min=8, message="password too short")])
-    password2 = PasswordField(label="repeat password", validators=[DataRequired(),
-                                                                   validators.Length(min=8,
-                                                                                     message="password too short")])
+                                                   Email(message="invalid email address"),
+                                                   Length(min=12, message="email too short")])
+    password = PasswordField(label="password", validators=[InputRequired(),
+                                                           EqualTo("password2", message="passwords must match"),
+                                                           Length(min=8, message="password too short")])
+    password2 = PasswordField(label="repeat password")
     name = StringField(label="name and surname", validators=[DataRequired()])
     street = StringField(label="street", validators=[DataRequired()])
-    city = StringField(label="city", validators=[DataRequired()])
+    city = StringField(label="ZIP code", validators=[DataRequired()])
     submit = SubmitField(label="log in")
 
 
@@ -176,25 +186,24 @@ def about():
                            newsletter=newsletter)
 
 
-@app.route("/contact", methods=["GET", "POST"])
-def contact():
-    newsletter = NewsletterForm()
-
-    if newsletter.validate_on_submit():
-        pass
-
-    return render_template("contact.html",
-                           current_year=datetime.now().year,
-                           newsletter=newsletter)
-
-
 @app.route("/log_in", methods=["GET", "POST"])
 def log_in():
     form = LogForm()
     newsletter = NewsletterForm()
 
     if form.validate_on_submit():
-        return redirect(url_for("homepage"))
+        try:
+            user = User.query.filter_by(email=form.email.data).first()
+            if check_password_hash(user.password, form.password.data):
+                flash("You have been logged in, have a nice shopping", "info")
+                return redirect(url_for("homepage"))
+            else:
+                flash("Invalid password", "info")
+        except AttributeError:
+            flash("There are no accounts created with this email address, create an account", "info")
+            return redirect(url_for("register"))
+        finally:
+            pass
 
     if newsletter.validate_on_submit():
         pass
@@ -211,10 +220,25 @@ def register():
     newsletter = NewsletterForm()
 
     if form.validate_on_submit():
-        return redirect(url_for("log_in"))
+        try:
+            db.session.add(User(name=form.name.data,
+                                street=form.street.data,
+                                city=form.city.data,
+                                email=form.email.data,
+                                password=generate_password_hash(form.password.data, method="pbkdf2:sha256", salt_length=8)))
+
+            db.session.commit()
+
+            flash("Account successfully created, log in", "info")
+            return redirect(url_for("log_in"))
+        except sqlalchemy.exc.IntegrityError:
+            flash("Account already exist, log in instead", "info")
+            return redirect(url_for("log_in"))
+        finally:
+            pass
 
     if newsletter.validate_on_submit():
-        print("xd")
+        print(newsletter.email.data)
 
     return render_template("register.html",
                            current_year=datetime.now().year,
@@ -224,6 +248,3 @@ def register():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-# COMMIT CHANGES TO DATABASE
-db.session.commit()

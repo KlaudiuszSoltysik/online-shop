@@ -12,13 +12,22 @@
         {% for error in form.password.errors %}
           <span style="color:red">{{ error }}</span>
         {% endfor %}
-      <p>{{ form.password2.label }} <br> {{ form.password(size=30) }}</p>
-        {% for error in form.password.errors %}
+      <p>{{ form.password2.label }} <br> {{ form.password2(size=30) }}</p>
+        {% for error in form.password2.errors %}
           <span style="color:red">{{ error }}</span>
         {% endfor %}
       <p>{{ form.name.label }} <br> {{ form.name(size=30) }}</p>
-      <p>{{ form.street.label }} <br> {{ form.name(size=30) }}</p>
-      <p>{{ form.city.label }} <br> {{ form.name(size=30) }}</p>
+        {% for error in form.name.errors %}
+          <span style="color:red">{{ error }}</span>
+        {% endfor %}
+      <p>{{ form.street.label }} <br> {{ form.street(size=30) }}</p>
+        {% for error in form.street.errors %}
+          <span style="color:red">{{ error }}</span>
+        {% endfor %}
+      <p>{{ form.city.label }} <br> {{ form.city(size=30) }}</p>
+        {% for error in form.city.errors %}
+          <span style="color:red">{{ error }}</span>
+        {% endfor %}
 	  <p>{{ form.submit }}</p>
     </form>
   </div>

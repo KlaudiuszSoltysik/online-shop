@@ -42,9 +42,6 @@
                 <a class="nav-link" href="{{ url_for('about') }}">about us</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('contact') }}">contact us</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('log_in') }}">log in</a>
               </li>
               <li class="nav-item">
@@ -55,3 +52,13 @@
         </div>
       </nav>
     </section>
+
+    <div class="flash-message">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for msg in messages %}
+            <h1>{{ msg }}</h1>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
