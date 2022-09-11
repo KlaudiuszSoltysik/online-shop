@@ -11,12 +11,14 @@
           </div >
           <div class="col-lg-6">
             <h1>subscribe:</h1>
-            {{ newsletter.csrf_token }}
-            {{ newsletter.email.label }} {{ newsletter.email(size=30) }}
-            {% for error in newsletter.email.errors %}
-              <span style="color:red">{{ error }}</span>
-            {% endfor %}
-            {{ newsletter.submit }}
+            <form method="POST" action="" novalidate>
+              {{ newsletter.csrf_token }}
+              {{ newsletter.email.label }} {{ newsletter.email(size=30) }}
+              {% for error in newsletter.email.errors %}
+                <span style="color:red">{{ error }}</span>
+              {% endfor %}
+              {{ newsletter.sign_in (class="btn btn-primary form-btn") }}
+            </form>
           </div>
         </div>
       </div>

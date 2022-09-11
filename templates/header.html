@@ -41,12 +41,24 @@
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('about') }}">about us</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('log_in') }}">log in</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('register') }}">register</a>
-              </li>
+              {% if not is_user_logged %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('log_in') }}">log in</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('register') }}">register</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <form method="POST" action="{{ url_for('homepage') }}" novalidate>
+                    {{ logout.csrf_token }}
+	                {{ logout.logout (class="btn btn-primary logout-btn") }}
+                  </form>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('cart') }}">shopping cart</a>
+                </li>
+              {% endif %}
             </ul>
           </div>
         </div>

@@ -4,15 +4,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap
 from werkzeug.security import generate_password_hash, check_password_hash
-
-from wtforms import StringField, PasswordField, SubmitField, validators
+from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, InputRequired, EqualTo, Length, Email
-
 from datetime import datetime
 
 app = Flask(__name__)
 Bootstrap(app)
 app.secret_key = "password"
+is_user_logged = False
+shopping_list = []
+size = 0
 
 # CONNECT WITH DATABASE
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///online_shop.db"
@@ -46,11 +47,15 @@ class User(db.Model):
     password = db.Column(db.String(256), nullable=False)
 
 
+class Newsletter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(32), nullable=False, unique=True)
+
+
 # FORMS
 class LogForm(FlaskForm):
     email = StringField(label="email", validators=[DataRequired(),
-                                                   Email(message="invalid email address"),
-                                                   Length(min=12, message="email too short")])
+                                                   Email(message="invalid email address")])
     password = PasswordField(label="password", validators=[DataRequired(),
                                                            Length(min=8, message="password too short")])
     submit = SubmitField(label="log in")
@@ -58,8 +63,7 @@ class LogForm(FlaskForm):
 
 class RegisterForm(FlaskForm):
     email = StringField(label="email", validators=[DataRequired(),
-                                                   Email(message="invalid email address"),
-                                                   Length(min=12, message="email too short")])
+                                                   Email(message="invalid email address")])
     password = PasswordField(label="password", validators=[InputRequired(),
                                                            EqualTo("password2", message="passwords must match"),
                                                            Length(min=8, message="password too short")])
@@ -67,42 +71,87 @@ class RegisterForm(FlaskForm):
     name = StringField(label="name and surname", validators=[DataRequired()])
     street = StringField(label="street", validators=[DataRequired()])
     city = StringField(label="ZIP code", validators=[DataRequired()])
-    submit = SubmitField(label="log in")
+    submit = SubmitField(label="register")
 
 
 class NewsletterForm(FlaskForm):
-    email = StringField(label="email", validators=[validators.Email(message="invalid email address"),
-                                                   validators.Length(min=12, message="email too short")])
-    submit = SubmitField(label="sign up")
+    email = StringField(label="email")
+    sign_in = SubmitField(label="sign up")
+
+
+class SearchForm(FlaskForm):
+    item = StringField()
+    search = SubmitField(label="search")
+
+
+class LogoutForm(FlaskForm):
+    logout = SubmitField(label="log out")
+
+
+class AddForm(FlaskForm):
+    size = SelectField(label="size", choices=[("39", "39"), ("40", "40"), ("41", "41")])
+    add = SubmitField(label="add to shopping cart")
+
+
+def add_to_newsletter(email):
+    if not email == "":
+        try:
+            db.session.add(Newsletter(email=email))
+            db.session.commit()
+        except:
+            pass
+        finally:
+            pass
 
 
 @app.route("/", methods=["GET", "POST"])
 def homepage():
-    newsletter = NewsletterForm()
+    global is_user_logged
+    global shopping_list
 
-    if newsletter.validate_on_submit():
-        pass
+    newsletter = NewsletterForm()
+    logout = LogoutForm()
+
+    if newsletter.validate_on_submit() and newsletter.sign_in.data:
+        add_to_newsletter(newsletter.email.data)
+
+    if logout.is_submitted() and not newsletter.sign_in.data:
+        is_user_logged = False
+        shopping_list = []
 
     return render_template("index.html",
                            current_year=datetime.now().year,
-                           newsletter=newsletter)
+                           newsletter=newsletter,
+                           logout=logout,
+                           is_user_logged=is_user_logged)
 
 
 @app.route("/shop", methods=["GET", "POST"])
 def shop():
-    newsletter = NewsletterForm()
     items = db.session.query(Item).all()
+    temp_items = []
 
-    search = request.args.get("search")
+    newsletter = NewsletterForm()
+    logout = LogoutForm()
+    search = SearchForm()
+
+    if newsletter.validate_on_submit() and newsletter.sign_in.data:
+        add_to_newsletter(newsletter.email.data)
+
+    if search.validate_on_submit() and search.search.data:
+        for item in items:
+            if item.model.lower().find(search.item.data.lower()) != -1:
+                temp_items.append(item)
+            elif item.brand.lower().find(search.item.data.lower()) != -1:
+                temp_items.append(item)
+
+        items = temp_items.copy()
+        temp_items = []
+
     gender = request.args.get("gender")
     color = request.args.get("color")
     size = request.args.get("size")
     sort = request.args.get("sort_by")
-
-    if newsletter.validate_on_submit():
-        pass
-
-    temp_items = []
 
     if gender:
         for item in items:
@@ -128,7 +177,7 @@ def shop():
         items = temp_items.copy()
         temp_items = []
 
-    if size == "40":
+    elif size == "40":
         for item in items:
             if item.stock_40:
                 temp_items.append(item)
@@ -136,7 +185,7 @@ def shop():
         items = temp_items.copy()
         temp_items = []
 
-    if size == "41":
+    elif size == "41":
         for item in items:
             if item.stock_41:
                 temp_items.append(item)
@@ -147,7 +196,7 @@ def shop():
     if sort == "price":
         items.sort(key=lambda x: x.price)
 
-    if sort == "model":
+    elif sort == "model":
         items.sort(key=lambda x: x.model)
 
     return render_template("shop.html",
@@ -157,45 +206,71 @@ def shop():
                            color=color,
                            size=size,
                            sort=sort,
-                           newsletter=newsletter)
+                           newsletter=newsletter,
+                           logout=logout,
+                           search=search,
+                           is_user_logged=is_user_logged)
 
 
 @app.route("/shop/<int:item_id>", methods=["GET", "POST"])
 def item(item_id):
-    newsletter = NewsletterForm()
+    global size
+
     item = Item.query.filter_by(id=item_id).first()
 
-    if newsletter.validate_on_submit():
-        pass
+    newsletter = NewsletterForm()
+    logout = LogoutForm()
+    add = AddForm()
+
+    if newsletter.validate_on_submit() and newsletter.sign_in.data:
+        add_to_newsletter(newsletter.email.data)
+
+    if add.validate_on_submit():
+        flash("Added to shopping cart", "info")
+        shopping_list.append(item)
+        size = add.size.data
 
     return render_template("item.html",
                            current_year=datetime.now().year,
                            item=item,
-                           newsletter=newsletter)
+                           newsletter=newsletter,
+                           logout=logout,
+                           add=add,
+                           is_user_logged=is_user_logged,
+                           shopping_list=shopping_list)
 
 
 @app.route("/about", methods=["GET", "POST"])
 def about():
     newsletter = NewsletterForm()
+    logout = LogoutForm()
 
-    if newsletter.validate_on_submit():
-        pass
+    if newsletter.validate_on_submit() and newsletter.sign_in.data:
+        add_to_newsletter(newsletter.email.data)
 
     return render_template("about.html",
                            current_year=datetime.now().year,
-                           newsletter=newsletter)
+                           newsletter=newsletter,
+                           logout=logout,
+                           is_user_logged=is_user_logged)
 
 
 @app.route("/log_in", methods=["GET", "POST"])
 def log_in():
+    global is_user_logged
+
     form = LogForm()
     newsletter = NewsletterForm()
 
-    if form.validate_on_submit():
+    if newsletter.validate_on_submit() and newsletter.sign_in.data:
+        add_to_newsletter(newsletter.email.data)
+
+    elif form.validate_on_submit():
         try:
             user = User.query.filter_by(email=form.email.data).first()
             if check_password_hash(user.password, form.password.data):
                 flash("You have been logged in, have a nice shopping", "info")
+                is_user_logged = True
                 return redirect(url_for("homepage"))
             else:
                 flash("Invalid password", "info")
@@ -204,9 +279,6 @@ def log_in():
             return redirect(url_for("register"))
         finally:
             pass
-
-    if newsletter.validate_on_submit():
-        pass
 
     return render_template("log_in.html",
                            current_year=datetime.now().year,
@@ -219,7 +291,10 @@ def register():
     form = RegisterForm()
     newsletter = NewsletterForm()
 
-    if form.validate_on_submit():
+    if newsletter.validate_on_submit() and newsletter.sign_in.data:
+        add_to_newsletter(newsletter.email.data)
+
+    elif form.validate_on_submit():
         try:
             db.session.add(User(name=form.name.data,
                                 street=form.street.data,
@@ -237,13 +312,33 @@ def register():
         finally:
             pass
 
-    if newsletter.validate_on_submit():
-        print(newsletter.email.data)
-
     return render_template("register.html",
                            current_year=datetime.now().year,
                            form=form,
                            newsletter=newsletter)
+
+
+@app.route("/shopping-cart", methods=["GET", "POST"])
+def cart():
+    newsletter = NewsletterForm()
+    logout = LogoutForm()
+
+    price = 0
+
+    if newsletter.validate_on_submit() and newsletter.sign_in.data:
+        add_to_newsletter(newsletter.email.data)
+
+    for item in shopping_list:
+        price += item.price
+
+    return render_template("shopping-cart.html",
+                           current_year=datetime.now().year,
+                           newsletter=newsletter,
+                           logout=logout,
+                           is_user_logged=is_user_logged,
+                           shopping_list=shopping_list,
+                           size=size,
+                           price=price)
 
 
 if __name__ == "__main__":

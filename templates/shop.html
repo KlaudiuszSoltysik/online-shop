@@ -4,10 +4,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-4">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="what are you looking for" aria-label="what are you looking for" aria-describedby="button-addon2">
-          <button class="btn btn-outline-secondary" type="button" id="button-addon2">search</button>
-        </div>
+        <form method="POST" action="" novalidate>
+          {{ search.csrf_token }}
+          {{ search.item.label }} {{ search.item(size=40) }}
+          {{ search.search (class="btn btn-primary form-btn") }}
+        </form>
       </div>
       <div class="col-lg-2 col-md-6">
         <div class="dropdown">
@@ -34,7 +35,7 @@
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color='black', size=size, sort_by=sort) }}">black</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color='while', size=size, sort_by=sort) }}">white</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color='white', size=size, sort_by=sort) }}">white</a></li>
             <li><a class="dropdown-item" href="{{ url_for('shop', gender=gender, color='other', size=size, sort_by=sort) }}">other</a></li>
           </ul>
         </div>
@@ -94,9 +95,6 @@
               <div class="row">
                 <div class="col">
                   <a href="{{ url_for('item', item_id=item.id) }}" class="btn btn-primary">open</a>
-                </div>
-                <div class="col">
-                  <a href="#" class="btn btn-primary">add</a>
                 </div>
               </div>
             </div>

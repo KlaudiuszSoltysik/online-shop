@@ -1,0 +1,21 @@
+{% include "header.html" %}
+
+<section id="cart">
+  <div class="container-fluid">
+    <ul class="list-group list-group-flush">
+      {% for item in shopping_list %}
+        <li class="list-group-item">
+          <h1>{{ item.brand }}</h1>
+          <h2>{{ item.model }}</h2>
+          <h3>size: {{ size }}</h3>
+          <h3 style="text-align: right;">{{ item.price }} PLN</h3>
+        </li>
+      {% endfor %}
+      <li class="list-group-item">
+        <h3 style="text-align: right;">total price {{ price }} PLN</h3>
+      </li>
+    </ul>
+  </div>
+</section>
+
+{% include "footer.html" %}

@@ -12,11 +12,19 @@
     font-size: 4rem;
 }
 
+#navigation-bar .navbar-brand:hover {
+    color: #7ef970;
+}
+
 #navigation-bar .nav-link {
     color: #c724b1;
     font-size: 2rem;
     margin-left: 1rem;
     margin-right: 1rem;
+}
+
+#navigation-bar .nav-link:hover {
+    color: #8c24c7;
 }
 
 #navigation-bar .navbar {
@@ -41,6 +49,10 @@
     margin: 1rem;
 }
 
+#footer svg:hover {
+    filter: invert(26%) sepia(69%) saturate(5416%) hue-rotate(271deg) brightness(79%) contrast(98%);
+}
+
 #footer  {
     background-color: #072436;
     color: #c724b1;
@@ -50,7 +62,7 @@
     text-align: center;
 }
 
-#footer .btn {
+#footer .form-btn {
     --bs-btn-active-bg: #c724b1 !important;
     --bs-btn-active-border-color: #c724b1 !important;
     --bs-btn-border-color: #c724b1 !important;
@@ -216,11 +228,43 @@
 #log-in .container-fluid {
     text-align: center;
     background-color: #9FB6B8;
-    padding: 3.65rem;
+    padding: 4.18rem;
 }
 
 #register .container-fluid {
     text-align: center;
     background-color: #9FB6B8;
     padding: 1rem;
+}
+
+.form-btn {
+    --bs-btn-active-bg: #072436 !important;
+    --bs-btn-bg: #072436 !important;
+    --bs-btn-active-border-color: #072436 !important;
+    --bs-btn-border-color: #072436 !important;
+    --bs-btn-color: #fff !important;
+    --bs-btn-hover-bg: #c724b1 !important;
+    --bs-btn-hover-border-color: #c724b1 !important;
+}
+
+.logout-btn {
+    --bs-btn-active-bg: #072436 !important;
+    --bs-btn-bg: #072436 !important;
+    --bs-btn-active-border-color: #072436 !important;
+    --bs-btn-active-color: #8c24c7 !important;
+    --bs-btn-border-color: #072436 !important;
+    --bs-btn-color: #c724b1 !important;
+    --bs-btn-hover-color: #8c24c7 !important;
+    --bs-btn-hover-bg: #072436 !important;
+    --bs-btn-hover-border-color: #072436 !important;
+    padding: 0;
+    font-size: 2rem !important;
+}
+
+#cart .container-fluid {
+    background-color: #9FB6B8;
+}
+
+#cart .list-group-item {
+    background-color: #9FB6B8;
 }

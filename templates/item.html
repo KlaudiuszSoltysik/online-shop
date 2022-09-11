@@ -29,8 +29,15 @@
             <h1 class="card-title">{{ item.brand }}</h1>
             <h1 class="card-title">{{ item.model }}</h1>
             <h2 class="card-title">{{ item.price }} PLN</h2>
-            <h3 class="card-title">size</h3>
-            <a href="#" class="btn btn-lg btn-primary">add to shopping cart</a>
+            {% if is_user_logged %}
+              <form method="POST" action="{{ url_for('item', item_id=item.id) }}" novalidate>
+                {{ add.csrf_token }}
+                <p>{{ add.size.label }} <br> {{ add.size }}</p>
+                {{ add.add (class="btn btn-primary form-btn") }}
+              </form>
+            {% else %}
+              <a href="{{ url_for('log_in') }}" class="btn btn-lg btn-primary">log in</a>
+            {% endif %}
           </div>
         </div>
       </div>
