@@ -15,3 +15,4 @@ Website features:
 -wide use of Jinja2 templates  
 -changing appearance depending on whether the user is logged in or not  
 -logging out empties the cart  
+-looks fine at all screen sizes
