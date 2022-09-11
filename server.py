@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, InputRequired, EqualTo, Length, Email
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -342,4 +343,4 @@ def cart():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), debug=True)
