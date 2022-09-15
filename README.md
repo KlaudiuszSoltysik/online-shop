@@ -10,7 +10,7 @@ Website features:
 -automatic product list generated on the basis of the database content  
 -working search bar, filters, and sorting  
 -flashing messages informing about user actions  
--well-thought-out redirect system ("register" page in case user is not found in the database)  
+-well-thought-out redirect system ("register" page in case user is not found in the database etc.)  
 -full validation of entered data along with password hashing  
 -wide use of Jinja2 templates  
 -changing appearance depending on whether the user is logged in or not  
