@@ -1,9 +1,7 @@
-# Video demonstration: 
-## https://www.youtube.com/watch?v=F8XgRytamNI
-
-I invite you to watch the video above.
-
-Website features:  
+# Online shop
+## Video demonstration: 
+https://www.youtube.com/watch?v=F8XgRytamNI
+## Website features:  
 -Bootstrap elements (navigation bar, carousel and many more)  
 -polished visual aspect (website is not pretty but each element has been customized)  
 -links to sub pages and other websites  
